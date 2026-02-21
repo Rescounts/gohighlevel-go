@@ -1,3 +1,3 @@
-module github.com/checkoutjoy/gohighlevel-go
+module github.com/Rescounts/gohighlevel-go
 
 go 1.24

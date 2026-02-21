@@ -5,7 +5,7 @@ import (
 	"log"
 	"os"
 
-	ghl "github.com/checkoutjoy/gohighlevel-go"
+	ghl "github.com/Rescounts/gohighlevel-go"
 )
 
 func main() {

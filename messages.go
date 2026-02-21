@@ -136,10 +136,6 @@ func (s *MessagesService) Send(req *SendMessageRequest) (*MessageResponse, error
 		return nil, fmt.Errorf("type is required")
 	}
 
-	if req.Status == "" {
-		return nil, fmt.Errorf("status is required")
-	}
-
 	var result MessageResponse
 	err := s.client.doRequest("POST", "/conversations/messages", req, &result, "2021-04-15")
 	if err != nil {

@@ -188,7 +188,7 @@ func (s *ContactsService) Create(req *CreateContactRequest) (*Contact, error) {
 	}
 
 	var result ContactResponse
-	err := s.client.doRequest("POST", "/contacts/", req, &result)
+	err := s.client.doRequest("POST", "/contacts/", req, &result, "2021-07-28")
 	if err != nil {
 		return nil, err
 	}
@@ -204,7 +204,7 @@ func (s *ContactsService) Get(contactID string) (*Contact, error) {
 	}
 
 	var result ContactResponse
-	err := s.client.doRequest("GET", fmt.Sprintf("/contacts/%s", contactID), nil, &result)
+	err := s.client.doRequest("GET", fmt.Sprintf("/contacts/%s", contactID), nil, &result, "2021-07-28")
 	if err != nil {
 		return nil, err
 	}
@@ -220,7 +220,7 @@ func (s *ContactsService) Update(contactID string, req *UpdateContactRequest) (*
 	}
 
 	var result ContactResponse
-	err := s.client.doRequest("PUT", fmt.Sprintf("/contacts/%s", contactID), req, &result)
+	err := s.client.doRequest("PUT", fmt.Sprintf("/contacts/%s", contactID), req, &result, "2021-07-28")
 	if err != nil {
 		return nil, err
 	}
@@ -235,7 +235,7 @@ func (s *ContactsService) Delete(contactID string) error {
 		return fmt.Errorf("contactId is required")
 	}
 
-	return s.client.doRequest("DELETE", fmt.Sprintf("/contacts/%s", contactID), nil, nil)
+	return s.client.doRequest("DELETE", fmt.Sprintf("/contacts/%s", contactID), nil, nil, "2021-07-28")
 }
 
 // Upsert creates or updates a contact based on duplicate detection settings
@@ -246,7 +246,7 @@ func (s *ContactsService) Upsert(req *UpsertContactRequest) (*Contact, error) {
 	}
 
 	var result ContactResponse
-	err := s.client.doRequest("POST", "/contacts/upsert", req, &result)
+	err := s.client.doRequest("POST", "/contacts/upsert", req, &result, "2021-07-28")
 	if err != nil {
 		return nil, err
 	}
@@ -288,7 +288,7 @@ func (s *ContactsService) List(opts *GetContactsOptions) (*ContactsResponse, err
 	}
 
 	var result ContactsResponse
-	err := s.client.doRequest("GET", path, nil, &result)
+	err := s.client.doRequest("GET", path, nil, &result, "2021-07-28")
 	if err != nil {
 		return nil, err
 	}
@@ -304,7 +304,7 @@ func (s *ContactsService) GetByBusinessID(businessID string) (*ContactsResponse,
 	}
 
 	var result ContactsResponse
-	err := s.client.doRequest("GET", fmt.Sprintf("/contacts/business/%s", businessID), nil, &result)
+	err := s.client.doRequest("GET", fmt.Sprintf("/contacts/business/%s", businessID), nil, &result, "2021-07-28")
 	if err != nil {
 		return nil, err
 	}
@@ -323,7 +323,7 @@ func (s *ContactsService) AddTags(contactID string, tags []string) error {
 	}
 
 	req := map[string][]string{"tags": tags}
-	return s.client.doRequest("POST", fmt.Sprintf("/contacts/%s/tags", contactID), req, nil)
+	return s.client.doRequest("POST", fmt.Sprintf("/contacts/%s/tags", contactID), req, nil, "2021-07-28")
 }
 
 // RemoveTags removes tags from a contact
@@ -337,5 +337,5 @@ func (s *ContactsService) RemoveTags(contactID string, tags []string) error {
 	}
 
 	req := map[string][]string{"tags": tags}
-	return s.client.doRequest("DELETE", fmt.Sprintf("/contacts/%s/tags", contactID), req, nil)
+	return s.client.doRequest("DELETE", fmt.Sprintf("/contacts/%s/tags", contactID), req, nil, "2021-07-28")
 }

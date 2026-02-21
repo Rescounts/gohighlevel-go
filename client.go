@@ -71,6 +71,7 @@ type Client struct {
 
 	// Resources
 	Contacts *ContactsService
+	Messages *MessagesService
 }
 
 // Config holds configuration for the GoHighLevel client
@@ -122,6 +123,7 @@ func NewClient(config Config) (*Client, error) {
 
 	// Initialize services
 	c.Contacts = &ContactsService{client: c}
+	c.Messages = &MessagesService{client: c}
 
 	return c, nil
 }
@@ -305,9 +307,9 @@ func (c *Client) fetchToken(data url.Values) error {
 }
 
 // doRequest performs an HTTP request with the access token
-func (c *Client) doRequest(method, path string, body interface{}, result interface{}) error {
+func (c *Client) doRequest(method, path string, body interface{}, result interface{}, apiVersion string) error {
 	// First attempt
-	statusCode, respBody, err := c.executeRequest(method, path, body)
+	statusCode, respBody, err := c.executeRequest(method, path, body, apiVersion)
 
 	// Check if we got a 401 and should auto-refresh
 	if statusCode == http.StatusUnauthorized && c.autoRefreshOn401 {
@@ -327,7 +329,7 @@ func (c *Client) doRequest(method, path string, body interface{}, result interfa
 			}
 
 			// Retry the request with new token
-			statusCode, respBody, err = c.executeRequest(method, path, body)
+			statusCode, respBody, err = c.executeRequest(method, path, body, apiVersion)
 		}
 	}
 
@@ -350,7 +352,7 @@ func (c *Client) doRequest(method, path string, body interface{}, result interfa
 }
 
 // executeRequest performs the actual HTTP request and returns status code, body, and error
-func (c *Client) executeRequest(method, path string, body interface{}) (int, []byte, error) {
+func (c *Client) executeRequest(method, path string, body interface{}, apiVersion string) (int, []byte, error) {
 	c.tokenMutex.RLock()
 	token := c.accessToken
 	c.tokenMutex.RUnlock()
@@ -376,7 +378,7 @@ func (c *Client) executeRequest(method, path string, body interface{}) (int, []b
 
 	req.Header.Set("Authorization", "Bearer "+token)
 	req.Header.Set("Accept", "application/json")
-	req.Header.Set("Version", "2021-07-28")
+	req.Header.Set("Version", apiVersion)
 	if body != nil {
 		req.Header.Set("Content-Type", "application/json")
 	}

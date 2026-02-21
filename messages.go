@@ -141,7 +141,7 @@ func (s *MessagesService) Send(req *SendMessageRequest) (*MessageResponse, error
 	}
 
 	var result MessageResponse
-	err := s.client.doRequest("POST", "conversations/messages", req, &result, "2021-04-15")
+	err := s.client.doRequest("POST", "/conversations/messages", req, &result, "2021-04-15")
 	if err != nil {
 		return nil, err
 	}
